@@ -2,12 +2,13 @@ package main
 
 import (
 	"auto-garden/argparsing"
-	"fmt"
+	"auto-garden/cli"
+	"auto-garden/web_server"
 )
 
 
 func main() {
-
 	a := argparsing.ParseArgs()
-	fmt.Printf("%+v", *(a.DbPassword))
+	cli.StartCli()
+	web_server.StartServer(a)
 }
