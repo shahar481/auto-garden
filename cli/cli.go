@@ -28,6 +28,7 @@ var (
 )
 
 
+// Gets args from the given array and adds the user to the db
 func addUserCommand(args []string) error {
 	user := args[0]
 	password := args[1]
@@ -36,12 +37,13 @@ func addUserCommand(args []string) error {
 	return db.AddUser(user, password, writePermission, readPermission)
 }
 
+// Gets args from the given array and removes the user from the db
 func removeUserCommand(args []string) error {
 	user := args[0]
 	return db.DeleteUser(user)
 }
 
-
+// Calls the appropriate function using the command
 func commandExecutor(command string) {
 	splitCommand := strings.Split(strings.TrimSpace(command), " ")
 	if command, ok := commands[splitCommand[0]]; ok {
@@ -57,6 +59,7 @@ func commandExecutor(command string) {
 	}
 }
 
+// Sets the cli suggestions using the command map
 func setSuggestions() {
 	suggestions := make([]prompt.Suggest, 0)
 	for command, _ := range commands {

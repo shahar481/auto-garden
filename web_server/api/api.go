@@ -13,7 +13,9 @@ var (
 
 func SetHTTPFunctions(server *atreugo.Atreugo) {
 	apiGroup := server.NewGroupPath(apiWebPath)
+	apiGroup.UseBefore(CheckWantedParameters)
 	for path, handlingFunction := range apiFunctions {
 		apiGroup.GET(path, handlingFunction)
 	}
 }
+

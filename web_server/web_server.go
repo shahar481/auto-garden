@@ -3,11 +3,21 @@ package web_server
 import (
 	"auto-garden/argparsing"
 	"auto-garden/web_server/api"
+	"auto-garden/web_server/api/plants"
 	"crypto/tls"
 	"fmt"
 	"github.com/savsgio/atreugo/v11"
 	"log"
 	"net"
+)
+
+var (
+	ApiFunctions = map[string]apiFunction {
+		"/garden/should-water": {
+			Func:       plants.ShouldWaterRequest,
+			Parameters: plants.ShouldWaterParameters,
+		},
+	}
 )
 
 // Creates a net.Listener object for tls connections
@@ -62,4 +72,8 @@ func StartServer(args *argparsing.Args) {
 	if err := server.Serve(listener); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func setApiFunctions(server *atreugo.Atreugo) {
+
 }
