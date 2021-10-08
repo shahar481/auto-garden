@@ -38,7 +38,7 @@ func ParseArgs() *Args {
 	argsInstance.DbPort = flag.Int("dbport", 5432, "Remote database port")
 	argsInstance.DbName = flag.String("dbname", "postgres", "Remote database name")
 	argsInstance.DbUsername = flag.String("dbuser", "postgres", "Remote db username")
-	argsInstance.DbPassword = flag.String("dbpass", "Password1", "Remote db password")
+	argsInstance.DbPassword = flag.String("dbpass", "Password1", "Remote db crypto")
 	argsInstance.WebListenIp = flag.String("weblistenip", "0.0.0.0", "HTTPS server listen ip")
 	argsInstance.WebListenPort = flag.Int("weblistenport", 443, "HTTPS server listen port")
 	argsInstance.WebKeyPath = flag.String("keypath", "./key", "HTTPS key file")

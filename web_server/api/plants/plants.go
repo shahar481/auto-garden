@@ -2,6 +2,8 @@ package plants
 
 import (
 	"auto-garden/db"
+	"auto-garden/web_server/api"
+	"auto-garden/web_server/api/verification"
 	"errors"
 	"fmt"
 	"github.com/savsgio/atreugo/v11"
@@ -10,28 +12,15 @@ import (
 )
 
 var (
-	shouldWaterParameters = map[string]func(param string) bool {
+	ShouldWaterParameters = map[string]func(param string) bool {
 		"plant_id":         db.IsInt8,
 		"currently_on":     db.IsBool,
 		"current_humidity": db.IsInt2}
 )
 
 
-func hasAllWantedVerifiedParameters(ctx *atreugo.RequestCtx, parameters map[string]func(param string) bool) bool {
-	q := ctx.QueryArgs()
-	for index, fun := range parameters {
-		if !q.Has(index) {
-			return false
-		}
-		if !fun(string(q.Peek(index))) {
-			return false
-		}
-	}
-	return true
-}
-
 func ShouldWaterRequest(ctx *atreugo.RequestCtx) error {
-	if !hasAllWantedVerifiedParameters(ctx, shouldWaterParameters) {
+	if !verification.HasAllWantedVerifiedParameters(ctx, ShouldWaterParameters) {
 		return ctx.ErrorResponse(errors.New("missing parameters\n"), fasthttp.StatusBadRequest)
 	}
 	id, _ := strconv.ParseInt(string(ctx.QueryArgs().Peek("plant_id")), 10, 64)
@@ -40,10 +29,9 @@ func ShouldWaterRequest(ctx *atreugo.RequestCtx) error {
 
 	water, err := db.ShouldWater(id, currentlyOn == "0", currentHumidity)
 	if err != nil {
-		return ctx.ErrorResponse(errors.New("Bad request\n"), fasthttp.StatusBadRequest)
+		return ctx.ErrorResponse(errors.New(api.BadRequestError), fasthttp.StatusBadRequest)
 	}
 
 	response := fmt.Sprintf("%+v", water)
 	return ctx.HTTPResponse(response, fasthttp.StatusOK)
 }
-
